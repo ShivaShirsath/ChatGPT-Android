@@ -2,6 +2,7 @@
 Android app using OpenAI's ChatGPT</br>
 It is possible to obtain the desired information through conversation or in-depth questions.
 
+
 Conversation content is managed through a Room Database.</br>
 You can delete the conversation by long-clicking the chatBox. (Based on LongClickEvent)
 
