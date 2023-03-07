@@ -2,19 +2,11 @@ name: Action Build
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
+    branches:
+      - master
+      - main
 jobs:
-  isvalid:
-    if: startsWith(github.event.commits[0].message, 'v')
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run
-        run: echo "Good to go"
   apk:
-    needs: isvalid
     name: Generate APK 
     runs-on: ubuntu-latest
     steps:
@@ -26,7 +18,9 @@ jobs:
           distribution: 'temurin'
           cache: gradle
       - name: Build APK
-        run: bash ./gradlew assembleDebug --stacktrace
+        run: |
+         gradle wrapper
+         bash ./gradlew assembleDebug --stacktrace
       - name: Upload APK
         uses: actions/upload-artifact@v2
         with:
@@ -35,6 +29,7 @@ jobs:
   release:
     name: Release APK
     needs: apk
+    if: startsWith(github.event.commits[0].message, 'v')
     runs-on: ubuntu-latest
     steps:
       - name: Download APK from build
